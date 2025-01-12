@@ -1,6 +1,6 @@
 # Django Model Prediction API
 
-This project provides a Django-based API that allows users to get predictions from a machine learning model. It supports loading a model (saved using `joblib`), preprocessing time-series data, and returning predictions based on the provided input.
+This project provides a Django-based API that allows users to get predictions from a machine learning models train on 92 different datasets. It supports loading a model (saved using `joblib`), preprocessing time-series data, and returning predictions based on the provided input.
 
 ## Features
 - Django REST API for model prediction.
