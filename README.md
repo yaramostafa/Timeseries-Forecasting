@@ -11,6 +11,8 @@ This project provides a Django-based API that allows users to get predictions fr
 ## Prerequisites
 
 - Docker (for containerization)
+- Models folder
+- Getting minimum required previous values for each dataset_id 
 
 ## Installation
 
