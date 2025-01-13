@@ -16,3 +16,4 @@ test_splits/*.csv
 Testing.ipynb
 # Ignore Jupyter notebook checkpoints
 .ipynb_checkpoints/
+*.docx
