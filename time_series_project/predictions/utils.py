@@ -4,12 +4,42 @@ import os
 import pandas as pd
 import joblib
 from typing import List, Tuple, Optional
+import pandas as pd
+import numpy as np
+import os
+import joblib
+from scipy.stats import zscore
+from statsmodels.tsa.stattools import pacf
+from scipy.stats import stats
 
 class TimeSeriesPreprocessor:
-    def __init__(self):
-        self.scalers = {}
-        self.max_lags = {}
-        self.selected_lags = {}  # Store selected lags for each dataset
+    def __init__(self, outlier_threshold: float = 3.0):
+        self.selected_lags = {}
+        self.outlier_threshold = outlier_threshold
+    def detect_outliers(self, series: pd.Series) -> pd.Series:
+        """
+        Detect outliers using z-score method.
+        Returns a boolean series where True indicates an outlier.
+        """
+        z_scores = np.abs(zscore(series, nan_policy='omit'))
+        return z_scores > self.outlier_threshold
+
+    def handle_outliers(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Handle outliers in the dataset, either using explicit anomaly labels
+        or detecting them using statistical methods.
+        """
+        df = df.copy()
+
+        if 'anomaly' in df.columns:
+            # Use explicit anomaly labels
+            df.loc[df['anomaly'], 'value'] = np.nan
+        else:
+            # Detect outliers using z-score method
+            outliers = self.detect_outliers(df['value'])
+            df.loc[outliers, 'value'] = np.nan
+
+        return df
 
     def standardize_timestamp(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.copy()
@@ -18,23 +48,16 @@ class TimeSeriesPreprocessor:
         return df
 
     def handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
+        # First try linear interpolation
         df = df.interpolate(method='linear')
+
+        # For any remaining NaNs at the edges, use forward and backward fill
         df = df.ffill()
         df = df.bfill()
+
         return df
 
     def select_significant_lags(self, series: pd.Series, max_lags: int = 50, threshold: float = 0.1) -> List[int]:
-        """
-        Select significant lags based on PACF values.
-
-        Parameters:
-        - series: Time series data
-        - max_lags: Maximum number of lags to consider
-        - threshold: Significance threshold for PACF values
-
-        Returns:
-        - List of significant lag values
-        """
         try:
             # Calculate PACF values
             pacf_values, confidence_intervals = pacf(series.dropna(), nlags=max_lags, alpha=0.05)
@@ -55,10 +78,6 @@ class TimeSeriesPreprocessor:
             print(f"Error in PACF calculation: {str(e)}")
             # Fallback to default lag 1 if PACF calculation fails
             return [1]
-
-    def get_window_size(self, df: pd.DataFrame, max_window_percentage: float = 0.2) -> int:
-        window_size = max(int(len(df) * max_window_percentage), 1)
-        return window_size
 
     def create_features(self, df: pd.DataFrame, dataset_id: str, n_lags: Optional[int] = None, drop_na: bool = True) -> Tuple[pd.DataFrame, List[str]]:
         features = []
@@ -117,7 +136,9 @@ class TimeSeriesPreprocessor:
         return df
 
     def preprocess(self, df: pd.DataFrame, dataset_id: str, n_lags: Optional[int] = None) -> Tuple[pd.DataFrame, List[str]]:
+        # My preprocessing pipeline
         df = self.standardize_timestamp(df)
+        df = self.handle_outliers(df)  # New step for outlier handling
         df = self.handle_missing_values(df)
         df, features = self.create_features(df, dataset_id, n_lags)
         df = self.add_rolling_features(df)
