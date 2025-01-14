@@ -11,8 +11,8 @@ This project provides a Django-based API that allows users to get predictions fr
 ## Prerequisites
 
 - Docker (for containerization)
-- Models folder
-- Getting minimum required previous values for each dataset_id 
+- Models folder (download from: https://drive.google.com/file/d/1G7NErkioy8atEgGBHTPOcCS10fHYdWX3/view?usp=sharing)
+- Getting minimum required previous values for each dataset_id -> Dataset Models Details.pdf
 
 ## Installation
 
@@ -24,11 +24,12 @@ Clone this repository to your local machine:
 
 ```bash
 git clone https://github.com/yaramostafa/Timeseries-Forecasting
-cd D:/Timeseries-Forecasting/django-model-prediction
+cd D:/Timeseries-Forecasting/time_series_project
 ```
-
 Or just open this Dir and download it: https://github.com/yaramostafa/Timeseries-Forecasting/tree/c0f0b782abbf2694848c95fed19362f845055541/time_series_project
 
+- Create folder "models" in folder "time_series_project" and put the models you downloaded into this folder
+  
 ### 2. Running the Project with Docker
 - Build the Docker Image
 Open wsl (in the project directory where the docker-file is)
