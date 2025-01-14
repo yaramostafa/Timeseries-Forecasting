@@ -1,4 +1,3 @@
-# prediction/utils.py
 import json
 import os
 import pandas as pd
@@ -196,4 +195,4 @@ class ModelTester:
         
         y_pred = model.predict(X_test)
 
-        return {"prediction": y_pred[0]}  # Return as list if it's a scalar
+        return {"prediction": y_pred[0]}  

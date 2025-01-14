@@ -1,17 +1,15 @@
-# prediction/views.py
 import json
 import os
 import joblib
 import pandas as pd
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .utils import ModelTester  # Assuming ModelTester class is in the utils.py file
+from .utils import ModelTester 
 
-# Set the path to the folder containing your models
+# path to the folder containing your models
 MODEL_FOLDER = "models"
 
-# Create a view to handle the prediction request
-@csrf_exempt  # Use this for POST requests without CSRF token (for testing only)
+@csrf_exempt 
 def predict(request):
     if request.method == 'POST':
         try:
