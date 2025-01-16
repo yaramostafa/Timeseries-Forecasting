@@ -12,7 +12,7 @@ This project provides a Django-based API that allows users to get predictions fr
 
 - Docker (for containerization)
 - Models folder (download from: https://drive.google.com/file/d/1G7NErkioy8atEgGBHTPOcCS10fHYdWX3/view?usp=sharing)
-- Getting minimum required previous values for each dataset_id -> Dataset Models Details.pdf (https://github.com/yaramostafa/Timeseries-Forecasting/blob/99b8d7ce69679a3cc4e7f38ef7dc5b86082e8ccc/Dataset%20Models%20Details.pdf)
+- Getting minimum required previous values for each dataset_id -> https://github.com/yaramostafa/Timeseries-Forecasting/blob/637db45a3f824a85b711ca411b17d4f124a7ca83/model_requirements.xlsx
 
 ## Installation
 
